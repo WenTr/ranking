@@ -8,3 +8,4 @@ pom.xml.versionsBackup
 pom.xml.next
 release.properties
 >>>>>>> 71d330c7ad4bed29208235fc1fa81179845ada50
+/target/
