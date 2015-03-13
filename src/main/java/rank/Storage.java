@@ -1,6 +1,5 @@
 package rank;
 
-
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -17,54 +16,15 @@ public class Storage {
 	File rankingJSON = new File("ranking.json");
 	File directoryFile = new File("files");
 	ObjectMapper obMap = new ObjectMapper();
-	
-	
-	public Storage (String index, String ranking){
+
+	public Storage(String index, String ranking) {
 		this.indexJSON = new File(index);
 		this.rankingJSON = new File(ranking);
 	}
-	
-//	public void store(String currentURL) {
-//		Extractor extr = new Extractor();
-//		
-//		// initial extraction
-//		try {
-//			obMap.writeValue(jsonFile, extr.parseExample(currentURL));
-//		} catch (JsonGenerationException e) {
-//			e.printStackTrace();
-//		} catch (JsonMappingException e) {
-//			e.printStackTrace();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//
-//		}
-//	}
-	
-//	public void store2(Map<String, Map<String,String>> linkMap) {
-//		try {
-//			obMap.writeValue(jsonFile, linkMap);
-//		} catch (JsonGenerationException e) {
-//			e.printStackTrace();
-//		} catch (JsonMappingException e) {
-//			e.printStackTrace();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//	}
-	
-	public void storeIndex(Map<String, HashMap<String, Integer>> wordIndex) {
-	File jsonFile = new File("index.json");
-	File jsonFile2 = new File("ranking.json");
-	File directoryFile = new File("files");
-	ObjectMapper obMap = new ObjectMapper();
-	}
 
-	
-	public Set<CrawledLink> readJSON(String jsonLink) {
-		
-		Set<CrawledLink> links = null;
+	public void storeIndex(Map<String, HashMap<String, Integer>> wordIndex) {
 		try {
-			links = obMap.readValue(new File(jsonLink), new TypeReference<Set<CrawledLink>>(){});
+			obMap.writeValue(indexJSON, wordIndex);
 		} catch (JsonGenerationException e) {
 			e.printStackTrace();
 		} catch (JsonMappingException e) {
@@ -72,9 +32,24 @@ public class Storage {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+	}
+
+	public Set<CrawledLink> readJSON(String jsonLink) {
+
+		Set<CrawledLink> links = null;
+		try {
+			links = obMap.readValue(new File(jsonLink),
+					new TypeReference<Set<CrawledLink>>() {
+					});
+		} catch (JsonGenerationException e) {
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 		return links;
 	}
-	
-}
 
+}
