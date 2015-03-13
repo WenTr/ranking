@@ -1,6 +1,6 @@
 # Ranking and Indexing
-<p>Ranking Webpages</p>
-<p>Indexing Words</p>
+<p>Indexing Words<br />
+Ranking Webpages</p>
 
 Team Members:
 
