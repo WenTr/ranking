@@ -32,6 +32,11 @@ public class Storage {
 		directoryFile.mkdir();
 	}
 	
+	public Storage (String index, String ranking){
+		this.indexJSON = new File(index);
+		this.rankingJSON = new File(ranking);
+	}
+	
 //	public void store(String currentURL) {
 //		Extractor extr = new Extractor();
 //		
