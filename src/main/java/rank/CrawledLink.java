@@ -16,8 +16,8 @@ public class CrawledLink{
 	private String mimeType;
 	private Map<String, String> metadata;
 	private Set<Link> listOfLinks;
-	private Map<String, Integer> wordMap;
-	private Set<String> wordSet;
+	private Map<String, Integer> wordMap; //set of (words, wordCount)
+	private Set<String> wordSet; //set of words per doc
 	
 	public CrawledLink(){
 		metadata = new HashMap<String,String>();

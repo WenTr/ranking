@@ -1,41 +1,41 @@
 package rank;
 
+/**
+ * Source:
+ * http://www.tutorialspoint.com/java/util/hashmap_put.htm
+ * 
+ */
+
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 public class Indexer {
-	public Map<String, HashMap<String, Integer>> indexWords(List<CrawledLink> linkList) {
-
-		Set<String> totalWords = new HashSet<String>();
+	public void wordIndexing(Set<String> setSW, Set<CrawledLink> allLinks) {
+		Map<String, Map<String, Integer>> wordIndex = new HashMap<String, Map<String, Integer>>();
+		Map<String, Integer> urlWordCount = new HashMap<String, Integer>();
+		Set<String> wordList = new HashSet<String>();
 		
-		Map<String, HashMap<String, Integer>> totalWordMap = new HashMap<String, HashMap<String, Integer>>();
-
-		for (CrawledLink link : linkList) {
-			totalWords.addAll(link.getWordSet());
+		//System.out.println(allLinks.toString());
+		
+		//put all the words from every link into a set
+		for (CrawledLink link : allLinks) {
+			System.out.println(link.getWordSet());
+			wordList.addAll(link.getWordSet());
 		}
-
-		for (String word : totalWords) {
-			System.out.print(word + " ");
-			HashMap<String, Integer> wordURLCount = new HashMap<String, Integer>();
-			for (int i = 0; i < linkList.size(); i++) {
-				Map<String, Integer> wordMap = linkList.get(i).getWordMap();
-				if (wordMap.containsKey(word)) {
-					wordURLCount.put(linkList.get(i).getLinkURL(), (Integer) wordMap.get(word));
+		System.out.println(wordList.size());
+		
+		//find words in links
+		for (String w : wordList) {
+			for (CrawledLink link : allLinks) {
+				if (link.getWordSet().contains(w)) {
+					urlWordCount.put(link.toString(), link.getWordMap().get(w));
 				}
 			}
-			System.out.println();
-			
-			totalWordMap.put(word, wordURLCount);
-			
+			wordIndex.put(w, urlWordCount);
+			urlWordCount = new HashMap<String, Integer>();
 		}
-		
-		System.out.println("\n\n");
-		
-		return totalWordMap;
+		System.out.println(wordIndex.toString());		
 	}
-	
-	
 }
