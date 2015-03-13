@@ -20,7 +20,7 @@ import java.util.Set;
 
 public class IndexerRankerApp {
 	public static void main(String args[]) {
-		String metaJsonFile = "C:\\Users\\tranw_000\\Desktop\\cs454SE\\data_extraction\\metadata2.json";
+		String metaJsonFile = "C:\\Users\\tranw_000\\Desktop\\cs454SE\\extraction\\metadata2.json";
 		String stopWordFile = "C:\\Users\\tranw_000\\Desktop\\cs454SE\\rank\\words.txt";
 		Set<String> setSW = new HashSet<String>();
 		

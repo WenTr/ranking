@@ -21,21 +21,27 @@ public class Indexer {
 		
 		//put all the words from every link into a set
 		for (CrawledLink link : allLinks) {
-			System.out.println(link.getWordSet());
-			wordList.addAll(link.getWordSet());
+			//System.out.println(link);
+			if (link.getWordSet() != null) {
+				wordList.addAll(link.getWordSet());
+			}
 		}
 		System.out.println(wordList.size());
+		
+		for (String sw : setSW) {
+			
+		}
 		
 		//find words in links
 		for (String w : wordList) {
 			for (CrawledLink link : allLinks) {
-				if (link.getWordSet().contains(w)) {
+				if (link.getWordSet() != null && link.getWordSet().contains(w)) {
 					urlWordCount.put(link.toString(), link.getWordMap().get(w));
 				}
 			}
 			wordIndex.put(w, urlWordCount);
 			urlWordCount = new HashMap<String, Integer>();
 		}
-		System.out.println(wordIndex.toString());		
+		//System.out.println(wordIndex.toString());		
 	}
 }
