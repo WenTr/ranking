@@ -4,7 +4,9 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -23,7 +25,8 @@ public class IndexerRankerApp {
 		Set<String> setSW = new HashSet<String>();
 		
 		Storage store = new Storage();
-		Set<CrawledLink> visitedLinks = null;
+		Indexer idx = new Indexer();
+		Set<CrawledLink> allLinks = null;
 		
 		try {
 			BufferedReader bR = new BufferedReader(new FileReader(stopWordFile));
@@ -46,7 +49,10 @@ public class IndexerRankerApp {
 		//System.out.println(setSW.toString());
 		//System.out.println(setSW.size());
 		
-		visitedLinks = store.readJSON(metaJsonFile);
-		//System.out.println(visitedLinks.size());
+		allLinks = store.readJSON(metaJsonFile);
+		//System.out.println(setSW.size());
+		//System.out.println(allLinks.size());
+		
+		idx.wordIndexing(setSW, allLinks);
 	}
 }
