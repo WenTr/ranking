@@ -29,6 +29,7 @@ public class IndexerRankerApp {
 		String rankingName = "ranking.json";
 		
 		Storage store = new Storage(indexName, rankingName);
+		Ranking rank = new Ranking();
 		Indexer idx = new Indexer();
 		Set<CrawledLink> allLinks = null;
 		Map<String, HashMap<String, Integer>> wordIndex = new HashMap<String, HashMap<String, Integer>>();
@@ -89,19 +90,25 @@ public class IndexerRankerApp {
 			e.printStackTrace();
 		}
 
-		//System.out.println(setSW.toString());
-		//System.out.println(setSW.size());
-		
-		//all the crawled links
+		//get all the crawled links
 		allLinks = store.readJSON(metaJsonFile);
-		//System.out.println(setSW.size());
-		//System.out.println(allLinks.size());
+
 		
-		//indexing words
-		wordIndex = idx.wordIndexing(setSW, allLinks);
+		/**
+		 * INDEXING
+		 */
+//		//indexing words
+//		wordIndex = idx.wordIndexing(setSW, allLinks);
+//		
+//		//store wordIndex to json file
+//		store.storeIndex(wordIndex);
 		
-		//store wordIndex to json file
-		store.storeIndex(wordIndex);
 		
+		/**
+		 * RANKING
+		 */
+		rank.pageRanking(allLinks);
+		rank.wordCalculation();
+		rank.addedRanking();
 	}
 }
