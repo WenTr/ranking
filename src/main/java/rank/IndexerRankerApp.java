@@ -6,7 +6,9 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -29,6 +31,7 @@ public class IndexerRankerApp {
 		Storage store = new Storage(indexName, rankingName);
 		Indexer idx = new Indexer();
 		Set<CrawledLink> allLinks = null;
+		Map<String, HashMap<String, Integer>> wordIndex = new HashMap<String, HashMap<String, Integer>>();
 		
 		Getopt g = new Getopt("testprog", args, "c:s:i:r:");
 		int k;
@@ -73,6 +76,7 @@ public class IndexerRankerApp {
 
 			while(line != null) {
 				//System.out.println(line);
+				//list of stop words
 				setSW.add(line);
 				line = bR.readLine();
 			}
@@ -88,10 +92,16 @@ public class IndexerRankerApp {
 		//System.out.println(setSW.toString());
 		//System.out.println(setSW.size());
 		
+		//all the crawled links
 		allLinks = store.readJSON(metaJsonFile);
 		//System.out.println(setSW.size());
 		//System.out.println(allLinks.size());
 		
-		idx.wordIndexing(setSW, allLinks);
+		//indexing words
+		wordIndex = idx.wordIndexing(setSW, allLinks);
+		
+		//store wordIndex to json file
+		store.storeIndex(wordIndex);
+		
 	}
 }

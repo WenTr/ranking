@@ -13,9 +13,9 @@ import java.util.Map;
 import java.util.Set;
 
 public class Indexer {
-	public void wordIndexing(Set<String> setSW, Set<CrawledLink> allLinks) {
-		Map<String, Map<String, Integer>> wordIndex = new HashMap<String, Map<String, Integer>>();
-		Map<String, Integer> urlWordCount = new HashMap<String, Integer>();
+	public Map<String, HashMap<String, Integer>> wordIndexing(Set<String> setSW, Set<CrawledLink> allLinks) {
+		Map<String, HashMap<String, Integer>> wordIndex = new HashMap<String, HashMap<String, Integer>>();
+		HashMap<String, Integer> urlWordCount = new HashMap<String, Integer>();
 		Set<String> wordList = new HashSet<String>();
 		
 		//System.out.println(allLinks.toString());
@@ -43,6 +43,8 @@ public class Indexer {
 			wordIndex.put(w, urlWordCount);
 			urlWordCount = new HashMap<String, Integer>();
 		}
-		//System.out.println(wordIndex.toString());		
+		//System.out.println(wordIndex.toString());
+		
+		return wordIndex;
 	}
 }
