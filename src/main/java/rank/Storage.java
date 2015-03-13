@@ -11,6 +11,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -22,7 +23,8 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 
 public class Storage {
-	File jsonFile = new File("metadata2.json");
+	File indexJSON = new File("index.json");
+	File rankingJSON = new File("ranking.json");
 	File directoryFile = new File("files");
 	ObjectMapper obMap = new ObjectMapper();
 	
@@ -58,10 +60,10 @@ public class Storage {
 //		}
 //	}
 	
-	public void store2(List<CrawledLink> linkList) {
+	public void storeIndex(Map<String, HashMap<String, Integer>> wordIndex) {
 		try {
 			System.out.println("Saving to JSON");
-			obMap.writeValue(jsonFile, linkList);
+			obMap.writeValue(indexJSON, wordIndex);
 		} catch (JsonGenerationException e) {
 			e.printStackTrace();
 		} catch (JsonMappingException e) {
