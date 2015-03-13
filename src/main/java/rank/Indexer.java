@@ -8,6 +8,7 @@ package rank;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -26,11 +27,11 @@ public class Indexer {
 				wordList.addAll(link.getWordSet());
 			}
 		}
-		System.out.println(wordList.size());
 		
-		for (String sw : setSW) {
-			
-		}
+		//removing stop words
+		System.out.println("Size Before: " + wordList.size());
+		wordList.removeAll(setSW);
+		System.out.println("Size After: " + wordList.size());
 		
 		//find words in links
 		for (String w : wordList) {
