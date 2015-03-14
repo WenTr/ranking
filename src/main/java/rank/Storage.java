@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Queue;
 import java.util.Set;
 
 import org.codehaus.jackson.JsonGenerationException;
@@ -25,6 +27,18 @@ public class Storage {
 	public void storeIndex(Map<String, HashMap<String, Integer>> wordIndex) {
 		try {
 			obMap.writeValue(indexJSON, wordIndex);
+		} catch (JsonGenerationException e) {
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void storeRank(Queue<Entry<String, Integer>> arrangedWL) {
+		try {
+			obMap.writeValue(rankingJSON, arrangedWL);
 		} catch (JsonGenerationException e) {
 			e.printStackTrace();
 		} catch (JsonMappingException e) {

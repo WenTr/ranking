@@ -101,7 +101,7 @@ public class IndexerRankerApp {
 		wordIndex = idx.wordIndexing(setSW, allLinks);
 //		
 //		//store wordIndex to json file
-//		store.storeIndex(wordIndex);
+		store.storeIndex(wordIndex);
 		
 		
 		/**

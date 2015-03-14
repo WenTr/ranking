@@ -1,15 +1,29 @@
 package rank;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
-import java.util.TreeMap;
+
+import javax.swing.event.ListSelectionEvent;
+
+import org.apache.poi.ss.formula.functions.T;
 
 /**
  * Source:
  * http://stackoverflow.com/questions/1066589/iterate-through-a-hashmap
  * http://www.programcreek.com/2013/03/java-sort-map-by-value/
+ * http://www.theserverside.com/news/thread.tss?thread_id=29569
+ * http://www.mkyong.com/java/how-to-sort-an-arraylist-in-java/
+ * http://docs.oracle.com/javase/tutorial/collections/interfaces/queue.html
+ * http://stackoverflow.com/questions/1694751/java-array-sort-descending
+ * http://stackoverflow.com/questions/3962766/java-reverse-list
  */
 
 public class Ranking {
@@ -21,29 +35,41 @@ public class Ranking {
 
 	}
 
+	//rank by the number of words a document has
+	@SuppressWarnings("unchecked")
 	public void addedRanking(Set<CrawledLink> allLinks, Map<String, HashMap<String, Integer>> wordIndex) {
-		//rank by the number of words a document has
-		//System.out.println(allLinks.toString());
-		//System.out.println(allLinks.size());
-		//System.out.println(wordIndex.size());
 		
-		Map<Integer, String> numWords = new TreeMap<Integer, String>();
-		//Map<String, Integer> arrangedWL = new HashMap<String, Integer>();
+		Map<String, Integer> numWords = new HashMap<String, Integer>();
+		Queue<Map.Entry<String, Integer>> arrangedWL = new LinkedList<Map.Entry<String, Integer>>();
 	
 		for (CrawledLink link : allLinks) {
 			if (link.getWordSet() != null) {
-				numWords.put(link.getWordSet().size(), link.getLinkURL());
+				numWords.put(link.getLinkURL(), link.getWordSet().size());
 			}
 		}
 		
-		//System.out.println(numWords.toString());
+//		for (Map.Entry<String, Integer> entry : numWords.entrySet()) {
+//			System.out.println(entry.getKey() + ": " + entry.getValue());
+//		}
 		
-		for (Map.Entry<Integer, String> entry : numWords.entrySet()) {
-			System.out.println(entry.getKey() + ": " + entry.getValue());
+		List<Integer> listVals = new ArrayList<Integer>(numWords.values());
+		Collections.sort(listVals);
+		Collections.reverse(listVals);
+		
+		for (Object i : listVals) {
+			for (Map.Entry<String, Integer> entry : numWords.entrySet()) {
+				//System.out.println(entry.getKey() + ": " + entry.getValue());
+				if (entry.getValue().equals(i)) {
+					arrangedWL.add(entry);
+				}
+			}
 		}
 		
-//		Map<Integer, String> arrangedWL = new TreeMap<Integer, String>(numWords);
-//		System.out.println();
-//		System.out.println(arrangedWL.toString());
+//		for (Map.Entry<String, Integer> eachEntry : arrangedWL) {
+//			System.out.println(eachEntry);
+//		}
+		
+		Storage save = new Storage("index.json", "ranking.json");
+		save.storeRank(arrangedWL);
 	}
 }
