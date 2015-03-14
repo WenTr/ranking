@@ -4,11 +4,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 /**
  * Source:
  * http://stackoverflow.com/questions/1066589/iterate-through-a-hashmap
- * 
+ * http://www.programcreek.com/2013/03/java-sort-map-by-value/
  */
 
 public class Ranking {
@@ -26,19 +27,23 @@ public class Ranking {
 		//System.out.println(allLinks.size());
 		//System.out.println(wordIndex.size());
 		
-		Map<String, Integer> numWords = new HashMap<String, Integer>();
-		Map<String, Integer> arrangedWL = new HashMap<String, Integer>();
-		
+		Map<Integer, String> numWords = new TreeMap<Integer, String>();
+		//Map<String, Integer> arrangedWL = new HashMap<String, Integer>();
+	
 		for (CrawledLink link : allLinks) {
 			if (link.getWordSet() != null) {
-				numWords.put(link.getLinkURL(), link.getWordSet().size());
+				numWords.put(link.getWordSet().size(), link.getLinkURL());
 			}
 		}
 		
+		//System.out.println(numWords.toString());
 		
-		for (Map.Entry<String, Integer> entry : numWords.entrySet()) {
-			
+		for (Map.Entry<Integer, String> entry : numWords.entrySet()) {
+			System.out.println(entry.getKey() + ": " + entry.getValue());
 		}
 		
+//		Map<Integer, String> arrangedWL = new TreeMap<Integer, String>(numWords);
+//		System.out.println();
+//		System.out.println(arrangedWL.toString());
 	}
 }
