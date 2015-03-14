@@ -84,7 +84,7 @@
 						<manifest>
 							<addClasspath>true</addClasspath>
 							<classpathPrefix>lib/</classpathPrefix>
-							<mainClass>edu.calstatela.cs454.data_extraction.ExtractorApp</mainClass>
+							<mainClass>rank.App</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
