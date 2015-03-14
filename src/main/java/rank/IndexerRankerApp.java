@@ -110,5 +110,7 @@ public class IndexerRankerApp {
 		rank.pageRanking(allLinks);
 		rank.wordCalculation();
 		rank.addedRanking(allLinks, wordIndex);
+		
+		//System.out.println("works");
 	}
 }

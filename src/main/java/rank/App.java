@@ -8,7 +8,7 @@ import gnu.getopt.Getopt;
 public class App {
 	
 	Indexer indexer = new Indexer();
-	Storage storage = new Storage();
+	Storage storage = new Storage("index.json", "ranking.json");
 
 	public static void main(String[] args) {
 

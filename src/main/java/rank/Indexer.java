@@ -8,6 +8,7 @@ package rank;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -45,5 +46,10 @@ public class Indexer {
 		//System.out.println(wordIndex.toString());
 		
 		return wordIndex;
+	}
+
+	public void indexWords(List<CrawledLink> visitedLinks) {
+		// TODO Auto-generated method stub
+		
 	}
 }
