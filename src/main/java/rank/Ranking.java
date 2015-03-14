@@ -1,19 +1,13 @@
 package rank;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
-
-import javax.swing.event.ListSelectionEvent;
-
-import org.apache.poi.ss.formula.functions.T;
 
 /**
  * Source:
@@ -36,7 +30,6 @@ public class Ranking {
 	}
 
 	//rank by the number of words a document has
-	@SuppressWarnings("unchecked")
 	public void addedRanking(Set<CrawledLink> allLinks, Map<String, HashMap<String, Integer>> wordIndex) {
 		
 		Map<String, Integer> numWords = new HashMap<String, Integer>();
@@ -69,7 +62,8 @@ public class Ranking {
 //			System.out.println(eachEntry);
 //		}
 		
-		Storage save = new Storage("index.json", "ranking.json");
-		save.storeRank(arrangedWL);
+		//For testing purposes
+		//Storage save = new Storage("index.json", "ranking.json");
+		//save.storeRank(arrangedWL);
 	}
 }
