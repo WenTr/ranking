@@ -21,19 +21,26 @@ import java.util.Set;
  */
 
 public class Ranking {
-	public void pageRanking(Set<CrawledLink> allLinks) {
-
-	}
-
-	public void wordCalculation() {
-
+	List<Map.Entry<String, Integer>> arrangedWL = new ArrayList<Map.Entry<String, Integer>>();
+	
+	
+	public int getRanking(String url){
+		
+		for (int i = 0; i< arrangedWL.size(); i++){
+			Map<String, Integer> rank = (Map<String, Integer>) arrangedWL.get(i);
+			if(rank.containsKey(url)){
+				return rank.get(i);
+			}
+		}
+		return 0;
+		
 	}
 
 	//rank by the number of words a document has
 	public void addedRanking(Set<CrawledLink> allLinks, Map<String, HashMap<String, Integer>> wordIndex) {
 		
 		Map<String, Integer> numWords = new HashMap<String, Integer>();
-		Queue<Map.Entry<String, Integer>> arrangedWL = new LinkedList<Map.Entry<String, Integer>>();
+		
 	
 		for (CrawledLink link : allLinks) {
 			if (link.getWordSet() != null) {

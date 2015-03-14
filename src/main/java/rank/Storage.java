@@ -3,6 +3,7 @@ package rank;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Queue;
@@ -36,9 +37,9 @@ public class Storage {
 		}
 	}
 	
-	public void storeRank(Queue<Entry<String, Integer>> arrangedWL) {
+	public void storeRank(Map<String, RankedLink> rankings) {
 		try {
-			obMap.writeValue(rankingJSON, arrangedWL);
+			obMap.writeValue(rankingJSON, rankings);
 		} catch (JsonGenerationException e) {
 			e.printStackTrace();
 		} catch (JsonMappingException e) {
