@@ -4,127 +4,76 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 public class Ranking {
+
+	public List<CrawledLink> keepURLS(List<CrawledLink> list) {
+		for (int i = 0; i < list.size(); i++) {
+			if (!list.get(i).getMimeType().contains("text/html")) {
+				list.remove(i);
+				i--;
+			}
+		}
+
+		return list;
+	}
+
 	public void pageRanking(Set<CrawledLink> allLinks) {
 		List<CrawledLink> linkers = new ArrayList<CrawledLink>(allLinks);
 		HashMap<String, Float> ranks = new HashMap<String, Float>();
 
-		// starting rank
-		float startRank = (float) (1.0 / linkers.size());
-
-		System.out.println(startRank);
 		System.out.println(linkers.size());
 
 		// filters out links that are not html
 		// puts links with starting rank into map (link, rank)
+
+		linkers = keepURLS(linkers);
+
+		float[] rankArray = new float[linkers.size()];
+		float[] temprankArray = new float[linkers.size()];
+
 		for (int i = 0; i < linkers.size(); i++) {
-			if (!linkers.get(i).getMimeType().contains("text/html")) {
-				linkers.remove(i);
-				i--;
-			} else
-				ranks.put(linkers.get(i).getLinkURL(), startRank);
+			rankArray[i] = (float) (1.0 / linkers.size());
 		}
 
 		System.out.println("ranks: " + ranks.size());
 
-		for (int i = 0; i < 10; i++) {
+		System.out.println("starting");
 
-			HashMap<String, Float> oldranks = new HashMap<String, Float>();
-			oldranks.putAll(ranks);
-			List<String> aa = new ArrayList<String>();
-
-			for (CrawledLink eachLink : linkers) {
+		for (int u = 0; u < 10; u++) {
+			System.out.println("u: " + u);
+			for (int i = 0; i < linkers.size(); i++) {
+				CrawledLink eachLink = linkers.get(i);
+				List<String> links = new ArrayList<String>();
 				for (CrawledLink everyLink : linkers) {
 					for (Link perLink : everyLink.getListOfLinks()) {
-						String a = eachLink.getLinkURL().toString()
-								.replaceAll("[^a-zA-Z0-9]", "");
-						String b = perLink.getUrl().replaceAll("[^a-zA-Z0-9]",
-								"");
-						if (a.equals(b)) {
-							aa.add(perLink.getUrl());
+						String linkA = eachLink.getLinkURL().toString().replaceAll("[^a-zA-Z0-9]", "");
+						String linkB = perLink.getUrl().replaceAll("[^a-zA-Z0-9]", "");
+						if (linkA.equals(linkB)) {
+							links.add(perLink.getUrl());
 						}
 					}
 				}
+				
+//				System.out.println("LINKS SIZE" + links.size());
+				
 				float h = (float) 0;
-				for (int w = 0; w < aa.size(); w++) {
-					// System.out.println(w);
-					if (oldranks.containsKey(aa.get(w))) {
-						// System.out.println(eachLink.getListOfLinks().size());
-						// float gg = oldranks.get(aa.get(w));
-						h += oldranks.get(aa.get(w))
-								/ linkers.get(linkers.indexOf(eachLink))
-										.getListOfLinks().size();
+				for (int w = 0; w < linkers.size(); w++) {
+						h += rankArray[w]/ links.size();
 					}
+				temprankArray[i] = h;
 				}
-				ranks.put(eachLink.getLinkURL(), h);
+						
+			rankArray = temprankArray;
 			}
+		
+		for(int i = 0; i < rankArray.length; i++){
+			System.out.println(rankArray[i] + " URL: " + linkers.get(i).getLinkURL());
 		}
-
-		// for (int u = 0; u < 1; u++) {
-		// System.out.println("u: " + u);
-		// HashMap<String, Float> oldranks = new HashMap<String, Float>();
-		// oldranks.putAll(ranks);
-		//
-		// for (int i = 0; i < linkers.size(); i++) {
-		// List<String> aa = new ArrayList<String>();
-		//
-		// // if (linkers.get(i).getMimeType().equals("text/html")) {
-		// for (CrawledLink eachLink : linkers) {
-		// for(CrawledLink everyLink : linkers){
-		// for(Link perLink : everyLink.getListOfLinks()){
-		// // System.out.println(eachLink.getLinkURL() + " + " +
-		// perLink.getUrl());
-		// // try {
-		// // TimeUnit.SECONDS.sleep(2);
-		// // } catch (InterruptedException e) {
-		// // // TODO Auto-generated catch block
-		// // e.printStackTrace();
-		// // }
-		// String a =
-		// eachLink.getLinkURL().toString().replaceAll("[^a-zA-Z0-9]", "");
-		// String b = perLink.getUrl().replaceAll("[^a-zA-Z0-9]", "");
-		//
-		// //System.out.println(a + " ************ " + b);
-		// if(a.equals(b)){
-		// aa.add(perLink.getUrl());
-		// //System.out.println(perLink.getUrl());
-		// }
-		// }
-		// }
-		// }
-		// //System.out.println("done");
-		// float h = (float) 0;
-		// for (int w = 0; w < aa.size(); w++) {
-		// for (int g = 0; g < linkers.size(); g++) {
-		// if (linkers.get(g).getLinkURL().equals(aa.get(w))) {
-		// if (linkers.get(g).getMimeType().contains("text/html")) {
-		// System.out.println(aa.get(w) + " " + h);
-		// h += oldranks.get(aa.get(w)) /
-		// linkers.get(g).getListOfLinks().size();
-		// // System.out.println(h);
-		// }
-		// }
-		// }
-		// }
-		// ranks.put(linkers.get(i).getLinkURL(), h);
-		// // }
-		//
-		// }
-		// }
 
 		System.out.println(ranks.keySet());
 		System.out.println(ranks.values());
 		System.out.println(ranks.size());
-
-	}
-
-	public void wordCalculation() {
-
-	}
-
-	public void addedRanking() {
 
 	}
 }

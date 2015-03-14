@@ -98,7 +98,7 @@ public class CrawledLink{
 	}
 	
 	public String toString(){
-		return "Link: " + linkURL + "-- Local Path: " + localPath + "-- Date: " + lastPullDate + "  -- mimeType: " + mimeType;
+		return "Link: " + linkURL + "\nLocal Path: " + localPath + "\nDate: " + lastPullDate + "\nmimeType: " + mimeType;
 		
 	}
 

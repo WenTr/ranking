@@ -22,8 +22,8 @@ import java.util.Set;
 
 public class IndexerRankerApp {
 	public static void main(String args[]) {
-		String metaJsonFile = "C:\\Users\\tranw_000\\Desktop\\cs454SE\\extraction\\metadata2.json";
-		String stopWordFile = "C:\\Users\\tranw_000\\Desktop\\cs454SE\\rank\\words.txt";
+		String metaJsonFile = "metadata2.json";
+		String stopWordFile = "words.txt";
 		Set<String> setSW = new HashSet<String>();
 		String indexName = "index.json";
 		String rankingName = "ranking.json";
@@ -108,7 +108,7 @@ public class IndexerRankerApp {
 		 * RANKING
 		 */
 		rank.pageRanking(allLinks);
-		rank.wordCalculation();
-		rank.addedRanking();
+//		rank.wordCalculation();
+//		rank.addedRanking();
 	}
 }
