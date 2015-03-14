@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
 
 
 /**
@@ -139,5 +140,15 @@ public class IndexerRankerApp {
 			System.out.println(i + ", Rank: " + ranks[i] + ", URL: " + linksList.get(i).getLinkURL());
 			
 		}
+		
+		List<HashMap<String, Float>> wordValues = new TFID().tfIdfCalculator(linksList, wordIndex.keySet());
+		
+			System.out.println(linksList.get(0).getLinkURL());
+			for (Entry<String, Float> entry : wordValues.get(0).entrySet()) {
+				System.out.println(entry.getKey() + " , " + entry.getValue());
+			}
+
+		
+		
 	}
 }

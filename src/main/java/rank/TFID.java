@@ -1,98 +1,81 @@
 package rank;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 public class TFID {
 
-	//This variable will hold all terms of each document in an array.
-    private List<CrawledLink> linkList = new ArrayList<CrawledLink>();
-    private List<String> allTerms = new ArrayList<String>(); //to hold all terms
-    private List tfidfDocsVector = new ArrayList<Object>();
+	// This variable will hold all terms of each document in an array.
+	private List<String> allTerms = new ArrayList<String>(); // to hold all
+																// terms
+	private List<HashMap<String, Float>> tfvectorList = new ArrayList<HashMap<String, Float>>();
 
-    /**
-     * Method to read files and store in array.
-     * @param filePath : source file path
-     * @throws FileNotFoundException
-     * @throws IOException
-     */
+	public List<HashMap<String, Float>> tfIdfCalculator(
+		List<CrawledLink> linkList, Set<String> allTerms) {
+		Float tf; // term frequency
+		Float idf; // inverse document frequency
+		Float tfidf; // term requency inverse document frequency
+		List<String> wordsTotal = new ArrayList<String>();
 
-    /**
-     * Method to create termVector according to its tfidf score.
-     */
-    public void tfIdfCalculator() {
-        double tf; //term frequency
-        double idf; //inverse document frequency
-        double tfidf; //term requency inverse document frequency
-        
-        
-        for (CrawledLink link: linkList) {
-        	Set<String> words = link.getWordSet();
-        	//String[] docTermsArray : termsDocsArray
-            double[] tfidfvectors = new double[allTerms.size()];
-            int count = 0;
-            for (String terms : allTerms) {
-                tf = tfCalculator(words, terms);
-                idf = idfCalculator(linkList, terms);
-                tfidf = tf * idf;
-                tfidfvectors[count] = tfidf;
-                count++;
-            }
-            tfidfDocsVector.add(tfidfvectors);  //storing document vectors;            
-        }
-    }
-	
-	
-	//Source: http://computergodzilla.blogspot.com/2013/07/how-to-calculate-tf-idf-of-document.html
-    /**
-     * Calculates the tf of term termToCheck
-     * @param totalterms : Array of all the words under processing document
-     * @param termToCheck : term of which tf is to be calculated.
-     * @return tf(term frequency) of term termToCheck
-     */
-    public double tfCalculator(Set<String> words, String termToCheck) {
-        double count = 0;  //to count the overall occurrence of the term termToCheck
-        for (String s : words) {
-            if (s.equalsIgnoreCase(termToCheck)) {
-                count++;
-            }
-        }
-        return count / words.size();
-    }
+		for (CrawledLink link : linkList) {
+			wordsTotal.addAll(link.getWordSet());
+		}
 
-    /**
-     * Calculates idf of term termToCheck
-     * @param allTerms : all the terms of all the documents
-     * @param termToCheck
-     * @return idf(inverse document frequency) score
-     */
-    public double idfCalculator(List<CrawledLink> linkList, String termToCheck) {
-        double count = 0;
-        for (CrawledLink link : linkList) {
-            for (String s : link.getWordSet()) {
-                if (s.equalsIgnoreCase(termToCheck)) {
-                    count++;
-                    break;
-                }
-            }
-        }
-        return 1 + Math.log(linkList.size() / count);
-    }
-    
-    
-    public List<String> getAllTerms() {
-		return allTerms;
+		Map<String, Float> idfMap = new HashMap<String, Float>();
+
+		for (String s : allTerms) {
+			idfMap.put(s, idfCalculator(linkList, s));
+		}
+
+		for (CrawledLink link : linkList) {
+			HashMap<String, Float> tfvectors = new HashMap<String, Float>();
+			for (String s : link.getWordSet()) {
+				tf = tfCalculator(getWordCount(link), link.getWordMap().get(s));
+				tfidf = tf * idfMap.get(s);
+				tfvectors.put(s, tfidf);
+			}
+			tfvectorList.add(tfvectors);
+		}
+
+		return tfvectorList;
 	}
 
+	public Float tfCalculator(int totalWords, Integer count) {
+		return  ((float)count / (float)totalWords);
+	}
+
+	public Float idfCalculator(List<CrawledLink> linkList, String termToCheck) {
+		double count = 0;
+		for (CrawledLink link : linkList) {
+			if(link.getWordMap().get(termToCheck) != null){
+				count += link.getWordMap().get(termToCheck);
+			}
+		}
+		Float linkSize = (float) linkList.size();
+		return (float) (1 + Math.log((linkSize/count)));
+	}
+
+	public List<String> getAllTerms() {
+		return allTerms;
+	}
 
 	public void setAllTerms(List<String> allTerms) {
 		this.allTerms = allTerms;
 	}
-	
-	
-	
-	
-	
+
+	public int getWordCount(CrawledLink link) {
+
+		int count = 0;
+		for (Entry<String, Integer> entry : link.getWordMap().entrySet()) {
+			count += entry.getValue();
+		}
+
+		return count;
+
+	}
 
 }
