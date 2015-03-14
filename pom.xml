@@ -79,12 +79,12 @@
 				<artifactId>maven-jar-plugin</artifactId>
 				<version>2.4</version>
 				<configuration>
-					<finalName>extractor</finalName>
+					<finalName>index</finalName>
 					<archive>
 						<manifest>
 							<addClasspath>true</addClasspath>
 							<classpathPrefix>lib/</classpathPrefix>
-							<mainClass>edu.calstatela.cs454.data_extraction.ExtractorApp</mainClass>
+							<mainClass>rank.IndexerRankerApp</mainClass>
 						</manifest>
 					</archive>
 				</configuration>

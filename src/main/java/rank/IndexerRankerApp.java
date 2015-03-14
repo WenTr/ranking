@@ -6,7 +6,9 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -93,5 +95,11 @@ public class IndexerRankerApp {
 		//System.out.println(allLinks.size());
 		
 		idx.wordIndexing(setSW, allLinks);
+		
+		List<CrawledLink> linksList = new ArrayList<CrawledLink>(allLinks);
+		Double [] ranks = new PageRanker().rankPages(linksList);
+		System.out.println(ranks);
+		
+		
 	}
 }
