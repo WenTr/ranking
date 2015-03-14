@@ -98,7 +98,7 @@ public class IndexerRankerApp {
 		 * INDEXING
 		 */
 //		//indexing words
-//		wordIndex = idx.wordIndexing(setSW, allLinks);
+		wordIndex = idx.wordIndexing(setSW, allLinks);
 //		
 //		//store wordIndex to json file
 //		store.storeIndex(wordIndex);
@@ -109,6 +109,6 @@ public class IndexerRankerApp {
 		 */
 		rank.pageRanking(allLinks);
 		rank.wordCalculation();
-		rank.addedRanking();
+		rank.addedRanking(allLinks, wordIndex);
 	}
 }

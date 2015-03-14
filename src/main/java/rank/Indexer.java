@@ -29,15 +29,15 @@ public class Indexer {
 		}
 		
 		//removing stop words
-		System.out.println("Size Before: " + wordList.size());
+		//System.out.println("Size Before: " + wordList.size());
 		wordList.removeAll(setSW);
-		System.out.println("Size After: " + wordList.size());
+		//System.out.println("Size After: " + wordList.size());
 		
 		//find words in links
 		for (String w : wordList) {
 			for (CrawledLink link : allLinks) {
 				if (link.getWordSet() != null && link.getWordSet().contains(w)) {
-					urlWordCount.put(link.toString(), link.getWordMap().get(w));
+					urlWordCount.put(link.getLinkURL(), link.getWordMap().get(w));
 				}
 			}
 			wordIndex.put(w, urlWordCount);
