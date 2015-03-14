@@ -6,10 +6,13 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 
 /**
  * 
@@ -32,6 +35,7 @@ public class IndexerRankerApp {
 		Ranking rank = new Ranking();
 		Indexer idx = new Indexer();
 		Set<CrawledLink> allLinks = null;
+		Set<CrawledLink> allLinksHTML = new HashSet<CrawledLink>();
 		Map<String, HashMap<String, Integer>> wordIndex = new HashMap<String, HashMap<String, Integer>>();
 		
 		Getopt g = new Getopt("testprog", args, "c:s:i:r:");
@@ -92,13 +96,23 @@ public class IndexerRankerApp {
 
 		//get all the crawled links
 		allLinks = store.readJSON(metaJsonFile);
+		
+		for(CrawledLink link: allLinks){
+			if(link.getLocalPath().contains(".html")){
+				allLinksHTML.add(link);
+			}
+		}
+		
+		
+		System.out.println("actual links: " + allLinksHTML.size());
 
 		
 		/**
 		 * INDEXING
 		 */
 //		//indexing words
-		wordIndex = idx.wordIndexing(setSW, allLinks);
+//		wordIndex = idx.wordIndexing(setSW, allLinks);
+		wordIndex = idx.wordIndexing(setSW, allLinksHTML);
 //		
 //		//store wordIndex to json file
 //		store.storeIndex(wordIndex);
@@ -107,8 +121,23 @@ public class IndexerRankerApp {
 		/**
 		 * RANKING
 		 */
-		rank.pageRanking(allLinks);
+		List<CrawledLink> linksList = new ArrayList<CrawledLink>(allLinksHTML);
+		Double [] ranks = new PageRanker().rankPages(linksList);
+		
+		rank.pageRanking(allLinksHTML);
 		rank.wordCalculation();
-		rank.addedRanking(allLinks, wordIndex);
+		rank.addedRanking(allLinksHTML, wordIndex);
+		
+//		List<CrawledLink> linksList = new ArrayList<CrawledLink>(allLinks);
+//		Double [] ranks = new PageRanker().rankPages(linksList);
+//		
+//		rank.pageRanking(allLinks);
+//		rank.wordCalculation();
+//		rank.addedRanking(allLinks, wordIndex);
+		
+		for(int i = 0; i< ranks.length; i++){
+			System.out.println(i + ", Rank: " + ranks[i] + ", URL: " + linksList.get(i).getLinkURL());
+			
+		}
 	}
 }
