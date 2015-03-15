@@ -3,7 +3,10 @@ package rank;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Set;
+
+import org.apache.commons.lang3.StringUtils;
 
 public class Ranking {
 
@@ -27,13 +30,27 @@ public class Ranking {
 		// filters out links that are not html
 		// puts links with starting rank into map (link, rank)
 
-		linkers = keepURLS(linkers);
+		for (int i = 0; i < linkers.size(); i++) {
+			if (!linkers.get(i).getMimeType().contains("text/html")) {
+				linkers.remove(i);
+				i--;
+			} else {
+				String a = linkers.get(i).getLinkURL().toString();
+				if (a.lastIndexOf("/") == a.length() - 1
+						|| a.lastIndexOf("#") == a.length() - 1) {
+					a = StringUtils.stripEnd(a, "/");
+					a = StringUtils.stripEnd(a, "#");
+				}
+				linkers.get(i).setLinkURL(a);
+			}
+		}
 
-		float[] rankArray = new float[linkers.size()];
-		float[] temprankArray = new float[linkers.size()];
+		// starting rank
+		float startRank = (float) (1.0 / linkers.size());
+		System.out.println(startRank);
 
 		for (int i = 0; i < linkers.size(); i++) {
-			rankArray[i] = (float) (1.0 / linkers.size());
+			ranks.put(linkers.get(i).getLinkURL(), startRank);
 		}
 
 		System.out.println("ranks: " + ranks.size());
@@ -41,16 +58,42 @@ public class Ranking {
 		System.out.println("starting");
 
 		for (int u = 0; u < 10; u++) {
-			System.out.println("u: " + u);
-			for (int i = 0; i < linkers.size(); i++) {
-				CrawledLink eachLink = linkers.get(i);
-				List<String> links = new ArrayList<String>();
+
+			HashMap<String, Float> oldranks = new HashMap<String, Float>();
+			oldranks.putAll(ranks);
+			List<String> aa = new ArrayList<String>();
+
+			//System.out.println("u: " + u);
+			for (CrawledLink eachLink : linkers) {
 				for (CrawledLink everyLink : linkers) {
-					for (Link perLink : everyLink.getListOfLinks()) {
-						String linkA = eachLink.getLinkURL().toString().replaceAll("[^a-zA-Z0-9]", "");
-						String linkB = perLink.getUrl().replaceAll("[^a-zA-Z0-9]", "");
-						if (linkA.equals(linkB)) {
-							links.add(perLink.getUrl());
+					if(eachLink != everyLink){
+						for (Link perLink : everyLink.getListOfLinks()) {
+	
+							String a = eachLink.getLinkURL().toString();
+							if (a.lastIndexOf("/") == a.length() - 1
+									|| a.lastIndexOf("#") == a.length() - 1) {
+								a = StringUtils.stripEnd(a, "/");
+								a = StringUtils.stripEnd(a, "#");
+							}
+	
+							String b = perLink.getUrl().toString();
+							if (b.lastIndexOf("/") == b.length() - 1
+									|| b.lastIndexOf("#") == b.length() - 1) {
+								b = StringUtils.stripEnd(b, "/");
+								b = StringUtils.stripEnd(b, "#");
+							}
+							
+							String c = eachLink.getLinkURL().toString();
+							if (c.lastIndexOf("/") == c.length() - 1
+									|| c.lastIndexOf("#") == c.length() - 1) {
+								c = StringUtils.stripEnd(c, "/");
+								c = StringUtils.stripEnd(c, "#");
+							}
+							
+							if (a.equals(b) && !aa.contains(c)) {
+								//System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&7: " + c);
+								aa.add(c);
+							}
 						}
 					}
 				}
@@ -58,22 +101,36 @@ public class Ranking {
 //				System.out.println("LINKS SIZE" + links.size());
 				
 				float h = (float) 0;
-				for (int w = 0; w < linkers.size(); w++) {
-						h += rankArray[w]/ links.size();
+
+				
+				//for(int w = 0; w < linkers.size(); w++){
+				//	if()
+				//}
+				System.out.println(aa.size());
+				for (int w = 0; w < aa.size(); w++) {
+					
+					if (oldranks.containsKey(aa.get(w))) {
+						System.out.println(aa.get(w) + " : " + w);
+						// 
+						 int uy = 0;
+						 for(int p = 0; p < linkers.size(); p++){
+							 if(linkers.get(p).getLinkURL().equals(aa.get(w))){
+								 uy = p;
+								 break;
+							 }
+						 }
+						 System.out.println(aa.get(w) + "::" + linkers.get(uy).getLinkURL());
+						h += oldranks.get(aa.get(w)) / linkers.get(uy).getListOfLinks().size();
 					}
-				temprankArray[i] = h;
 				}
-						
-			rankArray = temprankArray;
+
+				ranks.put(eachLink.getLinkURL(), h);
 			}
-		
-		for(int i = 0; i < rankArray.length; i++){
-			System.out.println(rankArray[i] + " URL: " + linkers.get(i).getLinkURL());
 		}
 
-		System.out.println(ranks.keySet());
-		System.out.println(ranks.values());
-		System.out.println(ranks.size());
+		for (Entry<String, Float> entry : ranks.entrySet()) {
+			System.out.println(entry.getKey() + " : " + entry.getValue());
+		}
 
 	}
 }
