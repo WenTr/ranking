@@ -36,9 +36,9 @@ public class Storage {
 		}
 	}
 	
-	public void storeRank(Queue<Entry<String, Integer>> arrangedWL) {
+	public void storeRank(Map<String, Integer> numWords) {
 		try {
-			obMap.writeValue(rankingJSON, arrangedWL);
+			obMap.writeValue(rankingJSON, numWords);
 		} catch (JsonGenerationException e) {
 			e.printStackTrace();
 		} catch (JsonMappingException e) {

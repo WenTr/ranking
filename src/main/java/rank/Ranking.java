@@ -31,24 +31,27 @@ public class Ranking {
 
 	//rank by the number of words a document has
 	public void addedRanking(Set<CrawledLink> allLinks, Map<String, HashMap<String, Integer>> wordIndex) {
-		
-		Map<String, Integer> numWords = new HashMap<String, Integer>();
-		Queue<Map.Entry<String, Integer>> arrangedWL = new LinkedList<Map.Entry<String, Integer>>();
-	
+
+		Map<String, Integer> urlNnumWords = new HashMap<String, Integer>();
+		//Queue<Map.Entry<String, Integer>> arrangedWL = new LinkedList<Map.Entry<String, Integer>>();
+
 		for (CrawledLink link : allLinks) {
 			if (link.getWordSet() != null) {
-				numWords.put(link.getLinkURL(), link.getWordSet().size());
+				urlNnumWords.put(link.getLinkURL(), link.getWordSet().size());
 			}
 		}
+
+		for (Map.Entry<String, Integer> entry : urlNnumWords.entrySet()) {
+			System.out.println(entry.getKey() + ": " + entry.getValue());
+		}
+
+
 		
-//		for (Map.Entry<String, Integer> entry : numWords.entrySet()) {
-//			System.out.println(entry.getKey() + ": " + entry.getValue());
-//		}
-		
+		/**
 		List<Integer> listVals = new ArrayList<Integer>(numWords.values());
 		Collections.sort(listVals);
 		Collections.reverse(listVals);
-		
+
 		for (Object i : listVals) {
 			for (Map.Entry<String, Integer> entry : numWords.entrySet()) {
 				//System.out.println(entry.getKey() + ": " + entry.getValue());
@@ -57,13 +60,15 @@ public class Ranking {
 				}
 			}
 		}
+
+		for (Map.Entry<String, Integer> eachEntry : arrangedWL) {
+			System.out.println(eachEntry);
+		}
+		 **/
+
 		
-//		for (Map.Entry<String, Integer> eachEntry : arrangedWL) {
-//			System.out.println(eachEntry);
-//		}
-		
-		//For testing purposes
+		//For testing purposes 
 		//Storage save = new Storage("index.json", "ranking.json");
-		//save.storeRank(arrangedWL);
+		//save.storeRank(urlNnumWords);
 	}
 }
