@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
 import org.apache.commons.lang3.StringUtils;
 
 public class Ranking {
-	public void pageRanking(Set<CrawledLink> allLinks) {
+	public HashMap<String,Float> pageRanking(Set<CrawledLink> allLinks) {
 		List<CrawledLink> linkers = new ArrayList<CrawledLink>(allLinks);
 		HashMap<String, Float> ranks = new HashMap<String, Float>();
 
@@ -112,6 +112,8 @@ public class Ranking {
 		for (Entry<String, Float> entry : ranks.entrySet()) {
 			System.out.println(entry.getKey() + " : " + entry.getValue());
 		}
+		
+		return ranks;
 
 	}
 
