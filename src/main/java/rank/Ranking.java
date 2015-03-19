@@ -3,6 +3,7 @@ package rank;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -17,7 +18,6 @@ public class Ranking {
 				i--;
 			}
 		}
-
 		return list;
 	}
 
@@ -124,7 +124,6 @@ public class Ranking {
 						h += oldranks.get(aa.get(w)) / linkers.get(uy).getListOfLinks().size();
 					}
 				}
-
 				ranks.put(eachLink.getLinkURL(), h);
 			}
 		}
@@ -134,4 +133,31 @@ public class Ranking {
 		}
 
 	}
+
+	public Map<String, Integer> addedRanking(Set<CrawledLink> allLinks) {
+
+		Map<String, Integer> urlNnumWords = new HashMap<String, Integer>();
+		//Queue<Map.Entry<String, Integer>> arrangedWL = new LinkedList<Map.Entry<String, Integer>>();
+
+		for (CrawledLink link : allLinks) {
+			if (link.getWordSet() != null) {
+				urlNnumWords.put(link.getLinkURL(), link.getWordSet().size());
+			}
+		}
+
+		for (Map.Entry<String, Integer> entry : urlNnumWords.entrySet()) {
+			System.out.println(entry.getKey() + ": " + entry.getValue());
+		}
+		
+		return urlNnumWords;
+
+
+		
+		//For testing purposes 
+		//Storage save = new Storage("index.json", "ranking.json");
+		//save.storeRank(urlNnumWords);
+	}
+
+
+
 }

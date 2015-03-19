@@ -70,7 +70,6 @@ public class IndexerRankerApp {
 		}
 		
 		
-		
 		try {
 			BufferedReader bR = new BufferedReader(new FileReader(stopWordFile));
 			String line = bR.readLine();
@@ -97,11 +96,11 @@ public class IndexerRankerApp {
 		/**
 		 * INDEXING
 		 */
-//		//indexing words
-//		wordIndex = idx.wordIndexing(setSW, allLinks);
+		//indexing words
+		wordIndex = idx.wordIndexing(setSW, allLinks);
 //		
 //		//store wordIndex to json file
-//		store.storeIndex(wordIndex);
+		store.storeIndex(wordIndex);
 		
 		
 		/**
