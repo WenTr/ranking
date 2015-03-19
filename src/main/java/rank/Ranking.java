@@ -57,8 +57,8 @@ public class Ranking {
 
 		System.out.println("starting");
 
-		for (int u = 0; u < 10; u++) {
 
+		for (int u = 0; u < 3; u++) {
 			HashMap<String, Float> oldranks = new HashMap<String, Float>();
 			oldranks.putAll(ranks);
 			List<String> aa = new ArrayList<String>();
@@ -83,7 +83,7 @@ public class Ranking {
 								b = StringUtils.stripEnd(b, "#");
 							}
 							
-							String c = eachLink.getLinkURL().toString();
+							String c = everyLink.getLinkURL().toString();
 							if (c.lastIndexOf("/") == c.length() - 1
 									|| c.lastIndexOf("#") == c.length() - 1) {
 								c = StringUtils.stripEnd(c, "/");
@@ -106,11 +106,11 @@ public class Ranking {
 				//for(int w = 0; w < linkers.size(); w++){
 				//	if()
 				//}
-				System.out.println(aa.size());
+				//System.out.println(aa.size());
 				for (int w = 0; w < aa.size(); w++) {
 					
 					if (oldranks.containsKey(aa.get(w))) {
-						System.out.println(aa.get(w) + " : " + w);
+						//System.out.println(aa.get(w) + " : " + w);
 						// 
 						 int uy = 0;
 						 for(int p = 0; p < linkers.size(); p++){
@@ -119,7 +119,8 @@ public class Ranking {
 								 break;
 							 }
 						 }
-						 System.out.println(aa.get(w) + "::" + linkers.get(uy).getLinkURL());
+
+						 //System.out.println(aa.get(w) + "::" + linkers.get(uy).getLinkURL());
 						h += oldranks.get(aa.get(w)) / linkers.get(uy).getListOfLinks().size();
 					}
 				}
