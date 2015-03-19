@@ -109,6 +109,6 @@ public class IndexerRankerApp {
 		 */
 		rank.pageRanking(allLinks);
 		rank.wordCalculation();
-		rank.addedRanking(allLinks, wordIndex);
+		rank.addedRanking(allLinks);
 	}
 }
