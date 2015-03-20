@@ -52,4 +52,17 @@ public class Storage {
 		return links;
 	}
 
+	public void storeRanking(Map<String, RankVector> combinedRanking) {
+		try {
+			obMap.writeValue(rankingJSON, combinedRanking);
+		} catch (JsonGenerationException e) {
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+
 }

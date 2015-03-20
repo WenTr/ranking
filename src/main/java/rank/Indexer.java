@@ -16,7 +16,7 @@ public class Indexer {
 	public Map<String, HashMap<String, Float>> wordIndexing(Set<String> setSW, List<CrawledLink> allLinks) {
 		
 		Map<String, HashMap<String, Float>> wordIndex = new HashMap<String, HashMap<String, Float>>();
-		TFID tfidCalc = new TFID();
+		TFID tfidCalc = new TFID(allLinks);
 		HashMap<String, Float> urlWordCount = new HashMap<String, Float>();
 		Set<String> wordList = new HashSet<String>();
 		
@@ -30,25 +30,26 @@ public class Indexer {
 			}
 		}
 		
+		
 		//removing stop words
 		System.out.println("Size Before: " + wordList.size());
 		wordList.removeAll(setSW);
 		System.out.println("Size After: " + wordList.size());
+		wordList.remove("");
 		
 		List<HashMap<String, Float>> tfidf = tfidCalc.tfIdfCalculator(allLinks, wordList);
 		
 		
 		//find words in links
-		for (String w : wordList) {
+		for (String word : wordList) {
 			for (int i = 0; i < allLinks.size(); i++) {
-				if (allLinks.get(i).getWordSet() != null && allLinks.get(i).getWordSet().contains(w)) {
-					urlWordCount.put(allLinks.get(i).getLinkURL(), tfidf.get(i).get(w));
+				if (allLinks.get(i).getWordSet() != null && allLinks.get(i).getWordSet().contains(word)) {
+					urlWordCount.put(allLinks.get(i).getLinkURL(), tfidf.get(i).get(word));
 				}
 			}
-			wordIndex.put(w, urlWordCount);
+			wordIndex.put(word, urlWordCount);
 			urlWordCount = new HashMap<String, Float>();
 		}
-		System.out.println(wordIndex.toString());
 		
 		return wordIndex;
 	}

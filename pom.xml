@@ -1,12 +1,13 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>ranking</groupId>
-  <artifactId>rank</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <name>Ranking</name>
-  <description>Ranking Webpages</description>
-  
-    <dependencies>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>ranking</groupId>
+	<artifactId>rank</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>Ranking</name>
+	<description>Ranking Webpages</description>
+
+	<dependencies>
 
 		<dependency>
 			<groupId>junit</groupId>
@@ -21,8 +22,8 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
-		  	<artifactId>commons-lang3</artifactId>
-		  	<version>3.3.2</version>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.3.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.tika</groupId>
@@ -55,6 +56,11 @@
 			<groupId>gnu.getopt</groupId>
 			<artifactId>java-getopt</artifactId>
 			<version>1.0.13</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>1.3.2</version>
 		</dependency>
 
 	</dependencies>
@@ -121,5 +127,5 @@
 				</plugin> -->
 		</plugins>
 	</build>
-  
+
 </project>

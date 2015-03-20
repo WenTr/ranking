@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
 
 /**
  * 
@@ -110,7 +111,23 @@ public class IndexerRankerApp {
 		/**
 		 * RANKING
 		 */
-//		rank.pageRanking(allLinks);
+		Map<String, Float> rankings= rank.pageRanking(allLinks);
+		Map<String, Double> ourRanking= rank.addedRanking(allLinks);
+		Map<String, RankVector> combinedRanking = new HashMap<String, RankVector>();
+		String url = "";
+		
+		for (int i = 0; i < linksList.size(); i++) {
+			url = linksList.get(i).getLinkURL();
+			
+			if(ourRanking.containsKey(url) && rankings.containsKey(url)){
+				combinedRanking.put(url, new RankVector(rankings.get(url), ourRanking.get(url)));
+			}
+
+		}
+		
+		store.storeRanking(combinedRanking);
+		
+		
 //		rank.wordCalculation();
 //		rank.addedRanking();
 	}
