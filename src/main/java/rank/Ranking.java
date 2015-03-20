@@ -10,18 +10,8 @@ import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 
 public class Ranking {
-
-	public List<CrawledLink> keepURLS(List<CrawledLink> list) {
-		for (int i = 0; i < list.size(); i++) {
-			if (!list.get(i).getMimeType().contains("text/html")) {
-				list.remove(i);
-				i--;
-			}
-		}
-		return list;
-	}
-
-	public void pageRanking(List<CrawledLink> linkers) {
+	public HashMap<String,Float> pageRanking(Set<CrawledLink> allLinks) {
+		List<CrawledLink> linkers = new ArrayList<CrawledLink>(allLinks);
 		HashMap<String, Float> ranks = new HashMap<String, Float>();
 
 		System.out.println(linkers.size());
@@ -130,6 +120,8 @@ public class Ranking {
 		for (Entry<String, Float> entry : ranks.entrySet()) {
 			System.out.println(entry.getKey() + " : " + entry.getValue());
 		}
+		
+		return ranks;
 
 	}
 
@@ -143,6 +135,8 @@ public class Ranking {
 				urlNnumWords.put(link.getLinkURL(), link.getWordSet().size());
 			}
 		}
+		
+
 
 		for (Map.Entry<String, Integer> entry : urlNnumWords.entrySet()) {
 			System.out.println(entry.getKey() + ": " + entry.getValue());
