@@ -22,7 +22,7 @@ public class Storage {
 		this.rankingJSON = new File(ranking);
 	}
 
-	public void storeIndex(Map<String, HashMap<String, Integer>> wordIndex) {
+	public void storeIndex(Map<String, HashMap<String, Float>> wordIndex) {
 		try {
 			obMap.writeValue(indexJSON, wordIndex);
 		} catch (JsonGenerationException e) {

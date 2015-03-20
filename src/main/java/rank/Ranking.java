@@ -21,8 +21,7 @@ public class Ranking {
 		return list;
 	}
 
-	public void pageRanking(Set<CrawledLink> allLinks) {
-		List<CrawledLink> linkers = new ArrayList<CrawledLink>(allLinks);
+	public void pageRanking(List<CrawledLink> linkers) {
 		HashMap<String, Float> ranks = new HashMap<String, Float>();
 
 		System.out.println(linkers.size());
