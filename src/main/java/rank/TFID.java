@@ -78,7 +78,7 @@ public class TFID {
 		if (!idfMap.containsKey(termToCheck)){
 			System.out.println("ERROR TERM" + termToCheck);
 		}
-		double count = idfMap.get(termToCheck);
+//		double count = idfMap.get(termToCheck);
 		for (CrawledLink link:  linkList) {
 			if(link.getWordSet() != null){
 				if(link.getWordSet().isEmpty()){

@@ -6,8 +6,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.xml.sax.ContentHandler;
-
 public class CrawledLink{
 	
 	private String linkURL;
