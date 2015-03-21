@@ -25,7 +25,7 @@ public class Storage {
 		this.rankingJSON = new File(ranking);
 	}
 
-	public void storeIndex(Map<String, HashMap<String, Integer>> wordIndex) {
+	public void storeIndex(Map<String, HashMap<String, Float>> wordIndex) {
 		try {
 			obMap.writeValue(indexJSON, wordIndex);
 		} catch (JsonGenerationException e) {
@@ -65,6 +65,19 @@ public class Storage {
 		}
 
 		return links;
+	}
+
+	public void storeRanking(Map<String, RankVector> combinedRanking) {
+		try {
+			obMap.writeValue(rankingJSON, combinedRanking);
+		} catch (JsonGenerationException e) {
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 }

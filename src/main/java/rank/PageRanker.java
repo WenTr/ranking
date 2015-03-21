@@ -1,79 +1,131 @@
 package rank;
 
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class PageRanker {
-	
-	public Double [] rankPages(List<CrawledLink> linkList){
-		
+
+	public Map<String,Float> rankPages(Set<CrawledLink> allLinks) {
+
+		ArrayList<CrawledLink> linkers = new ArrayList<CrawledLink>(allLinks);
 		System.out.println("PAGE RANKS");
+
+		for (int i = 0; i < linkers.size(); i++) {
+			String a = linkers.get(i).getLinkURL().toString();
+			if (a.lastIndexOf("/") == a.length() - 1
+					|| a.lastIndexOf("#") == a.length() - 1) {
+				a = StringUtils.stripEnd(a, "/");
+				a = StringUtils.stripEnd(a, "#");
+				linkers.get(i).setLinkURL(a);
+			}
+		}
+
+		@SuppressWarnings("unchecked")
+		ArrayList<CrawledLink> allLinkTypes = (ArrayList<CrawledLink>) linkers
+				.clone();
+		HashMap<String, Float> ranksMap = new HashMap<String, Float>();
 		
-		Double[] pageRanks = new Double[linkList.size()];
-		
-//		int appleCount = 0;
-		
-		
-		for(int i = 0; i < linkList.size(); i++ ){
-			pageRanks[i] = (1.0/linkList.size());
-//			System.out.println(pageRanks[i]);
+		Set<String> linkStrings = new HashSet<String>();
+
+		System.out.println("LINKERS" + linkers.size());
+
+		// filters out links that are not html
+		// puts links with starting rank into map (link, rank)
+
+		for (int i = 0; i < linkers.size(); i++) {
+			CrawledLink link = linkers.get(i);
+
+			if (link.getMetadata() != null
+					&& !link.getMetadata().get("Content-Type").contains("html")) {
+				linkers.remove(i);
+				i--;
+			}
+			Set<Link> modLinks = new HashSet<Link>();
+			for (Link l : link.getListOfLinks()) {
+				String b = l.getUrl();
+				if (b.lastIndexOf("/") == b.length() - 1
+						|| b.lastIndexOf("#") == b.length() - 1) {
+					b = StringUtils.stripEnd(b, "/");
+					b = StringUtils.stripEnd(b, "#");
+					modLinks.add(new Link(b, l.getText()));
+				}
+			}
+
+//			System.out.println("I: " + i);
+//			System.out.println("MOD LINKS:" + modLinks.size());
+			linkers.get(i).setListOfLinks(modLinks);
+		}
+
+		for (int i = 0; i < allLinkTypes.size(); i++) {
+			if(!linkStrings.contains(allLinkTypes.get(i).getLinkURL().toString())){
+				linkStrings.add(allLinkTypes.get(i).getLinkURL().toString());
+			}
+			else{
+				allLinkTypes.remove(i);
+			}
+			
 		}
 		
-		Double[] tempPageRanks = new Double[linkList.size()];
+		System.out.println("LINKS SIZE: " + allLinkTypes.size() + "  LINK STRING SIZE: " + linkStrings.size());
 		
-		for (int iterations = 0; iterations < 10; iterations++){
-			for(int i = 0; i < linkList.size(); i++ ){
-				Double rank = 0.0;
-				String currentLink = linkList.get(i).getLinkURL();
-				for(int j = 0; j < linkList.size(); j++){
-					if (i == j) continue;
-					else{
-						
+//		Float [] ranks = new Float[allLinkTypes.size()];
+
+		float startRank = (1.0F / (float) allLinkTypes.size());
+		System.out.println("START RANK" + startRank);
+
+		for (int i = 0; i < allLinkTypes.size(); i++) {
+			ranksMap.put(allLinkTypes.get(i).getLinkURL(), startRank);
+		}
+		
+		
+
+		HashMap<String, Float> tempranksMap = new HashMap<String, Float>();
+
+		for (int iterations = 0; iterations < 3; iterations++) {
+			System.out.println("ITERATION: " + iterations);
+			
+			tempranksMap = new HashMap<String, Float>();
+			
+			
+			for (int i = 0; i < allLinkTypes.size(); i++) {
+				Float rank = 0.0F;
+				String currentLink = allLinkTypes.get(i).getLinkURL();
+				
+				for (int j = 0; j < linkers.size(); j++) {
+					if (!currentLink.equals(linkers.get(j).getLinkURL())){
 						Set<String> links = new HashSet<String>();
-						for(Link l: linkList.get(j).getListOfLinks()){
+						for (Link l : linkers.get(j).getListOfLinks()) {
 							links.add(l.getUrl());
 						}
-						
-						if (links.contains(currentLink) || links.contains(currentLink + "/")){
-							rank += (pageRanks[j]/links.size());
+
+						if (links.contains(currentLink)) {
+							float jRank = ranksMap.get(linkers.get(j).getLinkURL());
+							rank += jRank/ (float)links.size();
 						}
 					}
 				}
-				
-				tempPageRanks[i] = rank;
+				tempranksMap.put(currentLink, rank);
 			}
 			
-			pageRanks = tempPageRanks;
+			for (Entry<String, Float> entry : tempranksMap.entrySet()) {
+				ranksMap.put(entry.getKey(), entry.getValue());
+			}
+			
 		}
 		
+
 		
-
-//				String currentLink = "http://www.apple.com";
-//				
-//				System.out.println(currentLink + "/");
-//				for(int j = 0; j < linkList.size(); j++){
-//						
-//						Set<String> links = new HashSet<String>();
-//						for(Link l: linkList.get(j).getListOfLinks()){
-//							links.add(l.getUrl());
-//						}
-//						
-//					
-//						if (links.contains(currentLink) || links.contains(currentLink + "/")){
-//							appleCount++;
-//						}
-//
-//				}
-//				
-//				
-//				System.out.println("APPLE LINKS: " + appleCount);
-//		
-		return pageRanks;
-
+		return ranksMap;
 
 	}
-	
-	
 
 }

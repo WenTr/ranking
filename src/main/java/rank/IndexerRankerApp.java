@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
 
 /**
  * 
@@ -23,17 +24,19 @@ import java.util.Set;
 
 public class IndexerRankerApp {
 	public static void main(String args[]) {
-		String metaJsonFile = "C:\\Users\\tranw_000\\Desktop\\cs454SE\\extraction\\metadata2.json";
-		String stopWordFile = "C:\\Users\\tranw_000\\Desktop\\cs454SE\\rank\\words.txt";
+		String metaJsonFile = "metadata2.json";
+		String stopWordFile = "words.txt";
 		Set<String> setSW = new HashSet<String>();
 		String indexName = "index.json";
 		String rankingName = "ranking.json";
 
+
+		Storage store = new Storage(indexName, rankingName);
 		Ranking rank = new Ranking();
-		PageRanker pageRanker = new PageRanker();
+		PageRanker ranker = new PageRanker();
 		Indexer idx = new Indexer();
 		Set<CrawledLink> allLinks = null;
-		Map<String, HashMap<String, Integer>> wordIndex = new HashMap<String, HashMap<String, Integer>>();
+		Map<String, HashMap<String, Float>> wordIndex = new HashMap<String, HashMap<String, Float>>();
 
 		Getopt g = new Getopt("testprog", args, "c:s:i:r:");
 		int k;
@@ -59,9 +62,10 @@ public class IndexerRankerApp {
 				arg = g.getOptarg();
 				System.out.println("You picked " + (char) k + " with argument "
 						+ ((arg != null) ? arg : "null"));
-				if (arg != null) {
+
+				if (arg != null)
 					indexName = arg;
-				}
+
 				break;
 			case 'r':
 				arg = g.getOptarg();
@@ -77,7 +81,6 @@ public class IndexerRankerApp {
 			}
 		}
 
-		Storage store = new Storage(indexName, rankingName);
 
 		try {
 			BufferedReader bR = new BufferedReader(new FileReader(stopWordFile));
@@ -110,12 +113,15 @@ public class IndexerRankerApp {
 
 		System.out.println("actual links: " + allLinksHTML.size());
 
+
+		List<CrawledLink> linksList = new ArrayList<CrawledLink>(allLinks);
+
 		/**
 		 * INDEXING
 		 */
-		// //indexing words
-		// wordIndex = idx.wordIndexing(setSW, allLinks);
-		wordIndex = idx.wordIndexing(setSW, allLinksHTML);
+		// indexing words
+		wordIndex = idx.wordIndexing(setSW, linksList);
+
 		//
 		// //store wordIndex to json file
 		store.storeIndex(wordIndex);
@@ -123,40 +129,32 @@ public class IndexerRankerApp {
 		/**
 		 * RANKING
 		 */
-		List<CrawledLink> linksList = new ArrayList<CrawledLink>(allLinksHTML);
-		Double[] ranks = pageRanker.rankPages(linksList);
+		Map<String, Float> rankings = ranker.rankPages(allLinks);
+		Map<String, Float> ourRanking = rank.addedRanking(allLinks);
+		Map<String, RankVector> combinedRanking = new HashMap<String, RankVector>();
+		String url = "";
 
-		// rank.pageRanking(allLinksHTML);
-		// rank.wordCalculation();
-		// rank.addedRanking(allLinksHTML, wordIndex);
-
-		// List<CrawledLink> linksList = new ArrayList<CrawledLink>(allLinks);
-		// Double [] ranks = new PageRanker().rankPages(linksList);
-		//
-		// rank.pageRanking(allLinks);
-		// rank.wordCalculation();
-		// rank.addedRanking(allLinks, wordIndex);
-
-		for (int i = 0; i < ranks.length; i++) {
-			System.out.println(i + ", Rank: " + ranks[i] + ", URL: "
-					+ linksList.get(i).getLinkURL());
-
-		}
-
-		List<HashMap<String, Float>> wordValues = new TFID().tfIdfCalculator(
-				linksList, wordIndex.keySet());
-
-		Map<String, RankedLink> rankings = new HashMap<String, RankedLink>();
+		System.out.println("RANKINGS" + rankings.size());
+		System.out.println("OUR RANKINGS" + ourRanking.size());
 
 		for (int i = 0; i < linksList.size(); i++) {
-			rankings.put(
-					linksList.get(i).getLinkURL(),
-					new RankedLink(ranks[i], wordValues.get(i), rank
-							.getRanking(linksList.get(i).getLinkURL())));
+			url = linksList.get(i).getLinkURL();
+
+			if (ourRanking.containsKey(url) && rankings.containsKey(url)) {
+				combinedRanking.put(url, new RankVector(rankings.get(url),
+						ourRanking.get(url)));
+			}
 
 		}
 
-		store.storeRank(rankings);
+		for (Entry<String, RankVector> entry : combinedRanking.entrySet()) {
+			System.out.println(entry.getKey() + ": "
+					+ entry.getValue().toString());
+		}
 
+		store.storeRanking(combinedRanking);
+
+		// rank.wordCalculation();
+		// rank.addedRanking();
 	}
 }
