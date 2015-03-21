@@ -70,7 +70,7 @@ public class TFID {
 	}
 
 	public void termCount(String termToCheck) {
-		System.out.println(termToCheck);
+//		System.out.println(termToCheck);
 		if (!idfMap.containsKey(termToCheck)){
 			System.out.println("ERROR TERM" + termToCheck);
 		}

@@ -1,30 +1,35 @@
 package rank;
 
 public class RankVector {
-	double brinRank;
-	double ourRank;
+	Float brinRank;
+	Float ourRank;
 	
-	public RankVector(double brinRank, double ourRank){
+	public RankVector(Float brinRank, Float ourRank){
 		this.brinRank = brinRank;
-		this.ourRank = brinRank;
-		
-		
+		this.ourRank = ourRank;
 	}
 
-	public double getBrinRank() {
+	public Float getBrinRank() {
 		return brinRank;
 	}
 
-	public void setBrinRank(double brinRank) {
+	public void setBrinRank(Float brinRank) {
 		this.brinRank = brinRank;
 	}
 
-	public double getOurRank() {
+	public Float getOurRank() {
 		return ourRank;
 	}
 
-	public void setOurRank(double ourRank) {
+	public void setOurRank(Float ourRank) {
 		this.ourRank = ourRank;
+	}
+	
+	@Override
+	public String toString(){
+		String s = "BRIN RANK: " + brinRank + "  OUR RANK: " + ourRank;
+		return s;
+		
 	}
 	
 
